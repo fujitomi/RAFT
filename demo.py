@@ -41,7 +41,7 @@ def viz(img, flo, i):
     output_dir = './images'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    cv2.imwrite(os.path.join(output_dir, '{:05d}.png'.format({i})), img_flo[:, :, [2,1,0]])
+    cv2.imwrite(os.path.join(output_dir, "{:05d}.png".format(i)), img_flo[:, :, [2,1,0]])
 
 
 
