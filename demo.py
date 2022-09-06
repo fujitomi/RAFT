@@ -38,10 +38,10 @@ def viz(img, flo):
     #cv2.imshow('image', img_flo[:, :, [2,1,0]]/255.0)
     #cv2.waitKey()
 
-    output_dir = '/images'
+    output_dir = './images'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    cv2.imwrite(os.path.join(output_dir, '0.png'), img_flo[:, :, [2,1,0]]/255.0)
+    cv2.imwrite(os.path.join(output_dir, '0.png'), img_flo[:, :, [2,1,0]])
 
 
 
