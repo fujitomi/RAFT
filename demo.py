@@ -12,6 +12,7 @@ from PIL import Image
 from raft import RAFT
 from utils import flow_viz
 from utils.utils import InputPadder
+from tqdm import tqdm
 
 
 
@@ -60,7 +61,7 @@ def demo(args):
         
         images = sorted(images)
         i = 0
-        for imfile1, imfile2 in zip(images[:-1], images[1:]):
+        for imfile1, imfile2 in tqdm(zip(images[:-1], images[1:])):
             image1 = load_image(imfile1)
             image2 = load_image(imfile2)
 
