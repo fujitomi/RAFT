@@ -61,7 +61,7 @@ def demo(args):
         
         images = sorted(images)
         i = 0
-        for imfile1, imfile2 in tqdm(zip(images[:-1], images[1:])):
+        for imfile1, imfile2 in tqdm(zip(images[:-args.frame_len], images[args.frame_len:])):
             image1 = load_image(imfile1)
             image2 = load_image(imfile2)
 
@@ -80,6 +80,7 @@ if __name__ == '__main__':
     parser.add_argument('--small', action='store_true', help='use small model')
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
     parser.add_argument('--alternate_corr', action='store_true', help='use efficent correlation implementation')
+    parser.add_argument('--frame_len', type=int, default=1, help='frame length of 2 images in flow estimation')
     args = parser.parse_args()
 
     demo(args)
