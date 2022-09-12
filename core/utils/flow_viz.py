@@ -106,7 +106,7 @@ def flow_uv_to_colors(u, v, convert_to_bgr=False):
     return flow_image
 
 
-def flow_to_image(flow_uv, clip_flow=None, convert_to_bgr=False):
+def flow_to_image(flow_uv, clip_flow=None, convert_to_bgr=False, fixed_scale=False):
     """
     Expects a two dimensional flow image of shape.
 
@@ -125,7 +125,9 @@ def flow_to_image(flow_uv, clip_flow=None, convert_to_bgr=False):
     u = flow_uv[:,:,0]
     v = flow_uv[:,:,1]
     rad = np.sqrt(np.square(u) + np.square(v))
-    rad_max = np.max(rad)
+    if fixed_scale: rad_max = 1.0
+    else: rad_max = np.max(rad)
+    print(rad_max)
     epsilon = 1e-5
     u = u / (rad_max + epsilon)
     v = v / (rad_max + epsilon)
