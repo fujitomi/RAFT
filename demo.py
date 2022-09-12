@@ -83,9 +83,9 @@ def demo(args):
                     firstIter = False
                 tmp_flows[i%args.filter_size] = flow_up[0]
                 print(tmp_flows.shape)
-                index = tmp_flows.pow(2).sum(dim=3, keepdim=True).median(dim=0, keepdim=True)[1]
+                index = tmp_flows.pow(2).sum(dim=1, keepdim=True).median(dim=0, keepdim=True)[1]
                 print(index.shape)
-                median_flow = tmp_flows.gather(dim=0, index = index.repeat(1,1,1,2))
+                median_flow = tmp_flows.gather(dim=0, index = index.repeat(1,2,1,1))
                 viz(image1, median_flow, i)
 
             else: viz(image1, flow_up, i)
