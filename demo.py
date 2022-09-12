@@ -61,9 +61,7 @@ def demo(args):
         
         images = sorted(images)
         i = 0
-        if args.mean_filter: 
-            tmp_imgs = np.array([])
-            tmp_flows = np.array([])
+        firstIter = True
         for imfile1, imfile2 in tqdm(zip(images[:-args.frame_len], images[args.frame_len:])):
             image1 = load_image(imfile1)
             image2 = load_image(imfile2)
@@ -73,11 +71,12 @@ def demo(args):
 
             flow_low, flow_up = model(image1, image2, iters=20, test_mode=True)
             if args.mean_filter:
-                np.append(tmp_flows, flow_up)
-                if i >= args.filter_size - 1:
-                    flow_mean = tmp_flows.mean(dim=0)
-                    viz(image1, flow_mean, i)
-                    np.delete(tmp_flows, 0, 0)
+                if firstIter: 
+                    tmp_flows = torch.zeros_like(flow_up)[None].repeat(args.filter_size,1,1,1)
+                tmp_flows[i%args.filter_size] = flow_up
+                mean_flow = tmp_flows.mean(dim=0)
+                print(mean_flow.shape)
+                viz(image1, mean_flow, i)
 
             else: viz(image1, flow_up, i)
             i += 1
