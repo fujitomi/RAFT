@@ -82,7 +82,7 @@ def demo(args):
                     tmp_flows = torch.zeros_like(flow_up).repeat(args.filter_size,1,1,1)
                     firstIter = False
                 tmp_flows[i%args.filter_size] = flow_up[0]
-                median_flow = tmp_flows.median(dim=0, keepdim=True)
+                median_flow = tmp_flows.median(dim=0, keepdim=True)[0]
                 viz(image1, median_flow, i)
 
             else: viz(image1, flow_up, i)
