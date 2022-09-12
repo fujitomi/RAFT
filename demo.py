@@ -82,8 +82,13 @@ def demo(args):
                     tmp_flows = torch.zeros_like(flow_up).repeat(args.filter_size,1,1,1)
                     firstIter = False
                 tmp_flows[i%args.filter_size] = flow_up[0]
+                # median for vector size
+                '''
                 index = tmp_flows.pow(2).sum(dim=1, keepdim=True).median(dim=0, keepdim=True)[1]
                 median_flow = tmp_flows.gather(dim=0, index = index.repeat(1,2,1,1))
+                '''
+                # median for each dimension
+                median_flow = tmp_flows.median(dim=0, keepdim=True)[0]
                 viz(image1, median_flow, i)
 
             else: viz(image1, flow_up, i)
