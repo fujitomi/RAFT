@@ -127,7 +127,6 @@ def flow_to_image(flow_uv, clip_flow=None, convert_to_bgr=False, fixed_scale=Tru
     rad = np.sqrt(np.square(u) + np.square(v))
     if fixed_scale: rad_max = 3.0
     else: rad_max = np.max(rad)
-    print(rad_max)
     epsilon = 1e-5
     u = u / (rad_max + epsilon)
     v = v / (rad_max + epsilon)
