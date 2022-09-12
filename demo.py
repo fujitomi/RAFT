@@ -72,10 +72,9 @@ def demo(args):
             flow_low, flow_up = model(image1, image2, iters=20, test_mode=True)
             if args.mean_filter:
                 if firstIter: 
-                    print(flow_up.shape)
-                    tmp_flows = torch.zeros_like(flow_up)[None].repeat(args.filter_size,1,1,1)
+                    tmp_flows = torch.zeros_like(flow_up).repeat(args.filter_size,1,1,1)
                     firstIter = False
-                tmp_flows[i%args.filter_size] = flow_up
+                tmp_flows[i%args.filter_size] = flow_up[0]
                 mean_flow = tmp_flows.mean(dim=0)
                 viz(image1, mean_flow, i)
 
