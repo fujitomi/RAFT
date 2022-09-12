@@ -70,13 +70,20 @@ def demo(args):
             image1, image2 = padder.pad(image1, image2)
 
             flow_low, flow_up = model(image1, image2, iters=20, test_mode=True)
-            if args.mean_filter:
+            if args.filter_type=='mean':
                 if firstIter: 
                     tmp_flows = torch.zeros_like(flow_up).repeat(args.filter_size,1,1,1)
                     firstIter = False
                 tmp_flows[i%args.filter_size] = flow_up[0]
                 mean_flow = tmp_flows.mean(dim=0, keepdim=True)
                 viz(image1, mean_flow, i)
+            elif args.filter_type=='median':
+                if firstIter: 
+                    tmp_flows = torch.zeros_like(flow_up).repeat(args.filter_size,1,1,1)
+                    firstIter = False
+                tmp_flows[i%args.filter_size] = flow_up[0]
+                median_flow = tmp_flows.median(dim=0, keepdim=True)
+                viz(image1, median_flow, i)
 
             else: viz(image1, flow_up, i)
             i += 1
@@ -90,7 +97,7 @@ if __name__ == '__main__':
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
     parser.add_argument('--alternate_corr', action='store_true', help='use efficent correlation implementation')
     parser.add_argument('--frame_len', type=int, default=1, help='frame length of 2 images in flow estimation')
-    parser.add_argument('--mean_filter', action='store_true', help='use small model')
+    parser.add_argument('--filter_type', type=str, default='None', help='use small model')
     parser.add_argument('--filter_size', type=int, default=9, help='filter window size')
 
     args = parser.parse_args()
