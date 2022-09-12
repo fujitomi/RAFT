@@ -73,6 +73,7 @@ def demo(args):
             if args.mean_filter:
                 if firstIter: 
                     tmp_flows = torch.zeros_like(flow_up)[None].repeat(args.filter_size,1,1,1)
+                    firstIter = False
                 tmp_flows[i%args.filter_size] = flow_up
                 mean_flow = tmp_flows.mean(dim=0)
                 print(mean_flow.shape)
