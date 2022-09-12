@@ -61,6 +61,9 @@ def demo(args):
         
         images = sorted(images)
         i = 0
+        if args.median_filter: 
+            tmp_imgs = np.array([])
+            tmp_flows = np.array([])
         for imfile1, imfile2 in tqdm(zip(images[:-args.frame_len], images[args.frame_len:])):
             image1 = load_image(imfile1)
             image2 = load_image(imfile2)
@@ -69,7 +72,14 @@ def demo(args):
             image1, image2 = padder.pad(image1, image2)
 
             flow_low, flow_up = model(image1, image2, iters=20, test_mode=True)
-            viz(image1, flow_up, i)
+            if args.median_filter:
+                np.append(tmp_flows, flow_up)
+                if i >= args.median_filter_size - 1:
+                    flow_mean = tmp_flows.mean(dim=0)
+                    viz(image1, flow_mean, i)
+                    np.delete(tmp_flows, 0, 0)
+
+            else: viz(image1, flow_up, i)
             i += 1
 
 
@@ -81,6 +91,9 @@ if __name__ == '__main__':
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
     parser.add_argument('--alternate_corr', action='store_true', help='use efficent correlation implementation')
     parser.add_argument('--frame_len', type=int, default=1, help='frame length of 2 images in flow estimation')
+    parser.add_argument('--mean_filter', action='store_true', help='use small model')
+    parser.add_argument('--mean_filter_size', type=int, default=9, help='filter window size')
+
     args = parser.parse_args()
 
     demo(args)
