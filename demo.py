@@ -28,6 +28,7 @@ def viz(img, flo, i):
     img = img[0].permute(1,2,0).cpu().numpy()
     flo = flo[0].permute(1,2,0).cpu().numpy()
     
+    raw_flo = flo.copy
     # map flow to rgb image
     flo = flow_viz.flow_to_image(flo)
     img_flo = np.concatenate([img, flo], axis=0)
@@ -42,7 +43,9 @@ def viz(img, flo, i):
     output_dir = './images'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    cv2.imwrite(os.path.join(output_dir, "{:05d}.png".format(i)), img_flo[:, :, [2,1,0]])
+    cv2.imwrite(os.path.join(output_dir, "img_flo_{:05d}.png".format(i)), img_flo[:, :, [2,1,0]])
+    np.save(os.path.join(output_dir, "raw_flo_{:05d}".format(i)), raw_flo)
+)
     #print(img_flo.shape) #[H, W, 3]
 
 
@@ -91,7 +94,9 @@ def demo(args):
                 median_flow = tmp_flows.median(dim=0, keepdim=True)[0]
                 viz(image1, median_flow, i)
 
-            else: viz(image1, flow_up, i)
+            else: 
+                viz(image1, flow_up, i)
+
             i += 1
 
 
