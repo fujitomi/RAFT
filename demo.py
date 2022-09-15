@@ -45,7 +45,6 @@ def viz(img, flo, i):
         os.makedirs(output_dir)
     cv2.imwrite(os.path.join(output_dir, "img_flo_{:05d}.png".format(i)), img_flo[:, :, [2,1,0]])
     np.save(os.path.join(output_dir, "raw_flo_{:05d}".format(i)), raw_flo)
-)
     #print(img_flo.shape) #[H, W, 3]
 
 
